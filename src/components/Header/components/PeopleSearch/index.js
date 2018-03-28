@@ -82,7 +82,7 @@ export default class GordonPeopleSearch extends Component {
         {...itemProps}
         key={suggestion.UserName}
         component={Link}
-        to={`/profile/${suggestion.UserName}`}
+        to={`/ProfileSearch/${suggestion.UserName}`}
         onClick={this.reset}
         className="people-search-suggestion"
       >

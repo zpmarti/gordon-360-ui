@@ -19,6 +19,7 @@ const makeHeaders = () => {
     const token = storage.get('token');
     return new Headers({
       Authorization: `Bearer ${token}`,
+      'Access-Control-Allow-Origin': '*',
     });
   } catch (err) {
     throw new Error('Token is not available');

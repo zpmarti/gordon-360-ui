@@ -22,7 +22,7 @@ import storage from './storage';
  * @global
  * @typedef AttendedEvent
  * @property {Object} CHDate Start time of the event
- * @property {String} CHTermCD Term code of the event
+ * @property {String} CHTermCD Term code of the eventn
  * @property {Object} CHTime Time the user's ID was scanned
  * @property {Number} Category_ID Category of the event
  * @property {String} Description Given description of the event
@@ -185,6 +185,47 @@ function setOnOffCampus(data) {
   }
   return data;
 }
+function setMajorObject(data) {
+  data.Majors = [];
+  if (data.Major1Description) {
+    data.Majors.push(data.Major1Description);
+  }
+  if (data.Major2Description) {
+    data.Majors.push(data.Major2Description);
+  }
+  if (data.Major3Description) {
+    data.Majors.push(data.Major3Description);
+  }
+  return data;
+}
+
+function setMinorObject(data) {
+  data.Minors = [];
+  if (data.Minor1Description) {
+    data.Minors.push(data.Minor1Description);
+  }
+  if (data.Minor2Description) {
+    data.Minors.push(data.Minor2Description);
+  }
+  if (data.Minor3Description) {
+    data.Minors.push(data.Minor3Description);
+  }
+  return data;
+}
+function formatCountry(profile) {
+  if (profile.Country) {
+    profile.Country = profile.Country.replace(/\w\S*/g, function(txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+    if (profile.Country.includes(',')) {
+      profile.Country =
+        profile.Country.slice(profile.Country.indexOf(',') + 2) +
+        ' ' +
+        profile.Country.slice(0, profile.Country.indexOf(','));
+    }
+  }
+  return profile;
+}
 function setClass(profile) {
   if (profile.PersonType === 'stu') {
     switch (profile.Class) {
@@ -192,7 +233,7 @@ function setClass(profile) {
         profile.Class = 'Freshman';
         break;
       case '2':
-        profile.Class = 'Sophmore';
+        profile.Class = 'Sophomore';
         break;
       case '3':
         profile.Class = 'Junior';
@@ -217,6 +258,46 @@ function setClass(profile) {
   return profile;
 }
 
+// function dataURItoBlob(dataURI) {
+//   // convert base64/URLEncoded data component to raw binary data held in a string
+//   var byteString;
+//   if (dataURI.split(',')[0].indexOf('base64') >= 0)
+//       byteString = atob(dataURI.split(',')[1]);
+//   else
+//       byteString = unescape(dataURI.split(',')[1]);
+
+//   // separate out the mime component
+//   var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+//   // write the bytes of the string to a typed array
+//   var ia = new Uint8Array(byteString.length);
+//   for (var i = 0; i < byteString.length; i++) {
+//       ia[i] = byteString.charCodeAt(i);
+//   }
+
+//   return new Blob([ia], {type:mimeString});
+// }
+
+// let uploadImage = function() {
+
+//        // See helper method on the bottom
+//           let dataUrl = $("#image-to-crop").cropper('getCroppedCanvas', {
+//               width: 320,
+//               height: 320
+//           }).toDataURL('image/jpg');
+//           let blob = dataURItoBlob(dataUrl);
+//           let blobName = "canvasImage.jpg";
+//           let imageData = new FormData();
+
+//           imageData.append("canvasImage", blob, "canvasImage.jpg");
+
+//           return postFileAsync("/profiles/" + "image", imageData,).catch((reason) => {
+//               error = true;
+//               showError(reason);
+//           });
+
+// };
+
 /**
  * Get events attended by the user
  * @param {String} username username of the user
@@ -230,12 +311,14 @@ const getAttendedEvents = (username, termCode) => http.get(`events/chapel/${user
  * @param {String} [username] Username in firstname.lastname format
  * @return {Promise.<String>} Image as a Base64-encoded string
  */
-const getImage = username => {
+const getImage = async username => {
+  let pic;
   if (username) {
-    return http.get(`profiles/Image/${username}`);
+    pic = await http.get(`profiles/Image/${username}/`);
+  } else {
+    pic = await http.get('profiles/Image');
   }
-
-  return http.get('profiles/Image');
+  return pic;
 };
 
 /**
@@ -286,8 +369,9 @@ const getChapelCredits = async () => {
  */
 const getProfile = username => {
   let profile;
+  console.log(username);
   if (username) {
-    profile = http.get(`profiles/${username}`);
+    profile = http.get(`profiles/${username}/`);
   } else {
     profile = http.get('profiles');
   }
@@ -313,13 +397,24 @@ function toggleMobilePhonePrivacy() {
 const getMemberships = async id => {
   let memberships;
   memberships = await http.get(`memberships/student/${id}`);
+  console.log(memberships);
+  return memberships;
+};
+
+const getPublicMemberships = async username => {
+  let memberships;
+  memberships = await http.get(`/memberships/student/username/${username}/`);
   return memberships;
 };
 const getProfileInfo = async username => {
   let profile = await getProfile(username);
+  console.log(profile);
   formatName(profile);
   setClass(profile);
+  setMajorObject(profile);
+  formatCountry(profile);
   setOnOffCampus(profile);
+  setMinorObject(profile);
   return profile;
 };
 
@@ -330,5 +425,6 @@ export default {
   getChapelCredits,
   getImage,
   getLocalInfo,
+  getPublicMemberships,
   getProfileInfo,
 };

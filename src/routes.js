@@ -6,6 +6,7 @@ import Home from './views/Home';
 import Help from './views/Help';
 import Events from './views/Events';
 import Profile from './views/Profile';
+import ProfileSearch from './views/ProfileSearch';
 
 // Route order must be from most specific to least specific (i.e. `/user/:username` before `/user`)
 export default [
@@ -49,5 +50,10 @@ export default [
     name: 'Profile',
     path: '/profile/:username',
     component: Profile,
+  },
+  {
+    name: 'Person Search',
+    path: '/ProfileSearch/:username',
+    component: ProfileSearch,
   },
 ];
