@@ -321,6 +321,15 @@ const getImage = async username => {
   return pic;
 };
 
+function updateImage() {
+  return http
+    .post(`profiles/image/reset/`, null)
+    .then(res => {})
+    .catch(reason => {
+      //TODO handle error
+    });
+}
+
 /**
  * Get local info encoded in payload of token
  * @return {Promise.<LocalInfo>} Local user info
@@ -378,11 +387,15 @@ const getProfile = username => {
   return profile;
 };
 
-function toggleMobilePhonePrivacy() {
-  let profile = getProfileInfo();
-  let currentPrivacy = profile.IsMobilePhonePrivate;
-  let newPrivacy = currentPrivacy ? 'N' : 'Y';
-  let setPrivacy = async function(value) {
+function toggleMobilePhonePrivacy(profile) {
+  let newPrivacy;
+  console.log(profile);
+  if (profile.IsMobilePhonePrivate === 0) {
+    newPrivacy = 'Y';
+  } else {
+    newPrivacy = 'N';
+  }
+  let setPrivacy = function(value) {
     return http
       .put('profiles/mobile_privacy/' + value, value)
       .then(res => {})
@@ -390,7 +403,6 @@ function toggleMobilePhonePrivacy() {
         //TODO handle error
       });
   };
-
   setPrivacy(newPrivacy);
 }
 
@@ -415,6 +427,7 @@ const getProfileInfo = async username => {
   formatCountry(profile);
   setOnOffCampus(profile);
   setMinorObject(profile);
+  updateImage();
   return profile;
 };
 

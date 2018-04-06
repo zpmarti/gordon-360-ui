@@ -1,3 +1,10 @@
+import user from './../../services/user';
+import { gordonColors } from '../../theme';
+import Activities from './../../components/ActivityList';
+import Majors from './../../components/MajorList';
+import GordonLoader from './../../components/Loader';
+import 'react-image-crop/lib/ReactCrop.scss';
+
 import Grid from 'material-ui/Grid';
 import React, { Component } from 'react';
 import Divider from 'material-ui/Divider/Divider';
@@ -14,12 +21,6 @@ import Dialog, {
   DialogContent,
 } from 'material-ui/Dialog';
 import { Cropper } from 'react-image-cropper';
-import user from './../../services/user';
-import { gordonColors } from '../../theme';
-import Activities from './../../components/ActivityList';
-import Majors from './../../components/MajorList';
-import GordonLoader from './../../components/Loader';
-import 'react-image-crop/lib/ReactCrop.scss';
 
 export default class Profile extends Component {
   constructor(props) {
@@ -40,10 +41,10 @@ export default class Profile extends Component {
     };
   }
 
-  handleExpandClick() {
+  handleExpandClick = async () => {
     this.changePrivacy();
-    user.toggleMobilePhonePrivacy();
-  }
+    user.toggleMobilePhonePrivacy(this.state.profile);
+  };
 
   handleOpen = () => {
     this.setState({ preview: null });
@@ -52,6 +53,11 @@ export default class Profile extends Component {
 
   handleClose = () => {
     this.setState({ open: false });
+  };
+
+  handelCrop = () => {
+    let image = this.cropper.props.src;
+    this.setState({ preview: image });
   };
 
   changePrivacy() {
@@ -65,9 +71,7 @@ export default class Profile extends Component {
     this.setState({ preview });
     console.log(preview);
   }
-  rand() {
-    return Math.round(Math.random() * 20) - 10;
-  }
+
   componentWillMount() {
     // const { username } = this.props.match.params.username;
     this.loadProfile();
@@ -113,6 +117,7 @@ export default class Profile extends Component {
       justifyContent: 'center',
       alignItems: 'center',
     };
+
     let activityList;
     if (!this.state.activities) {
       activityList = <GordonLoader />;
@@ -122,17 +127,45 @@ export default class Profile extends Component {
       ));
     }
 
-    let uploadImage;
-    if (!preview) {
-      uploadImage = <img src={require('./image.png')} alt="" style={style} />;
-    } else {
-      uploadImage = (
+    let actions = (
+      <div>
+        <Button onClick={this.handleClose} raised style={button}>
+          Cancel
+        </Button>
+        <Button onClick={this.handleClose} raised style={button}>
+          Submit
+        </Button>
+      </div>
+    );
+    let content = (
+      <Dropzone
+        onDrop={this.onDrop.bind(this)}
+        accept="image/jpeg,image/jpg,image/tiff,image/gif,image/png"
+        style={photoUploader}
+      >
+        <img src={require('./image.png')} alt="" style={style} />
+      </Dropzone>
+    );
+    if (preview) {
+      content = (
         <Cropper
           src={preview[0].preview}
           ref={ref => {
             this.cropper = ref;
           }}
         />
+      );
+      // let image = this.cropper.crop();
+      console.log(this.cropper);
+      actions = (
+        <div>
+          <Button onClick={this.handleClose} raised style={button}>
+            Cancel
+          </Button>
+          <Button onClick={this.handelCrop} raised style={button}>
+            Crop
+          </Button>
+        </div>
       );
       //  <img src={preview[0].preview} alt="" style={style} />
     }
@@ -167,22 +200,9 @@ export default class Profile extends Component {
                             <DialogContentText>
                               Drag and Drop Picture, or Click to Browse Your Files
                             </DialogContentText>
-                            <Dropzone
-                              onDrop={this.onDrop.bind(this)}
-                              accept="image/jpeg,image/jpg,image/tiff,image/gif,image/png"
-                              style={photoUploader}
-                            >
-                              {uploadImage}
-                            </Dropzone>
+                            {content}
                           </DialogContent>
-                          <DialogActions>
-                            <Button onClick={this.handleClose} raised style={button}>
-                              Cancel
-                            </Button>
-                            <Button onClick={this.handleClose} raised style={button}>
-                              Submit
-                            </Button>
-                          </DialogActions>
+                          <DialogActions>{actions}</DialogActions>
                         </Dialog>
                       </Grid>
                       <Grid item xs={6} sm={6} md={6} lg={4}>
