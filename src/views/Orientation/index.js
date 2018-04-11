@@ -6,7 +6,6 @@ import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import { LinearProgress } from 'material-ui/Progress';
-import Text from 'material-ui/Text';
 
 import './orientation.css';
 import { Subheader } from 'material-ui/Subheader';
@@ -86,7 +85,6 @@ export default class Orientation extends Component {
                 <CardText
                 text={<Text className={residenceText}/>}
                 />
-                </CardText>
               </CardContent>
             </Collapse>
           </Card>
