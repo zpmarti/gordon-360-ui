@@ -17,6 +17,22 @@ export default class Orientation extends Component {
   }
 
   render() {
+      let residenceAvatar;
+      let residenceSubheader;
+      let tasksComplete = Math.round(Math.random() * 100);
+      let tasksTotal = Math.round(Math.random() * 100);
+      if (tasksTotal < tasksComplete) tasksComplete = tasksTotal;
+
+      if (Math.round(Mathrandom()) === 0)
+      {
+          residenceAvatar = 'green-avatar';
+          residenceSubheader = 'Completed!';
+      }
+      else
+      {
+          residenceAvatar = 'red-avatar';
+          residenceSubheader = 'Not yet complete.';
+      }
 
     return (
       <Grid container justify="center">
@@ -24,23 +40,21 @@ export default class Orientation extends Component {
           <figure>
             <figcaption>
               <h3>Tasks Complete</h3>
-              {3} of {5}
+              {tasksComplete} of {tasksTotal}
             </figcaption>
             <LinearProgress
               className="orientation-progress"
               mode="determinate"
-              value={60}
+              value={tasksComplete / tasksTotal *100}
             />
           </figure>
         </Grid>
         <Grid item xs={12}>
           <Card>
             <CardContent>
-              <CardHeader
-                avatar={
-                  <Avatar className="green-avatar" />
-                }
-                title="ID Photo Received"
+               <CardHeader
+                avatar={<Avatar className={residenceAvatar} />}
+                title="Residence Hall Assigned"
                 subheader="Completed!"
               />
             </CardContent>
