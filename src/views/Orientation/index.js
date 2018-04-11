@@ -19,19 +19,26 @@ export default class Orientation extends Component {
   render() {
       let residenceAvatar;
       let residenceSubheader;
+      let surveyStatus;
+      let requestProcessed;
       let tasksComplete = Math.round(Math.random() * 100);
       let tasksTotal = Math.round(Math.random() * 100);
       if (tasksTotal < tasksComplete) tasksComplete = tasksTotal;
 
-      if (Math.round(Mathrandom()) === 0)
+      if ((surveyStatus==true)&&(requestProcessed==true))
       {
           residenceAvatar = 'green-avatar';
           residenceSubheader = 'Completed!';
       }
-      else
+      else if(surveyStatus==false)
       {
           residenceAvatar = 'red-avatar';
           residenceSubheader = 'Not yet complete.';
+      }
+      else if((surveyStatus==true)&&(requestProcessed==false))
+      {
+        residenceAvatar = 'yellow-avatar';
+        residenceSubheader = 'Received, in process'
       }
 
     return (
@@ -49,6 +56,8 @@ export default class Orientation extends Component {
             />
           </figure>
         </Grid>
+        if (className={residenceAvatar} == 'green-avatar')
+        {
         <Grid item xs={12}>
           <Card>
             <CardContent>
@@ -68,22 +77,24 @@ export default class Orientation extends Component {
               </IconButton>
             </CardActions>
             <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-              <CardContent>
-                "This is a placeholder string that will be replaced by information about the
-                item that needs to be completed."
+              <CardContent>//if the housing survey has been processed and the room assigned
+                " Your housing assignment has been made!
+                [insert housing string here?] [Welcome to _____ Hall!]
+                Contact Housing@gordon.edu if you need to update your information, or if you have a question."
               </CardContent>
             </Collapse>
           </Card>
         </Grid>
+        }
+        else if (residenceAvatar == 'yellow-avatar')
+        {
         <Grid item xs={12}>
           <Card>
             <CardContent>
               <CardHeader
-                avatar={
-                  <Avatar className="yellow-avatar" />
-                }
-                title="Financial Hold"
-                subheader="In Progress"
+                avatar={<Avatar className={residenceAvatar} />}
+                title="Residence Hall Assignment"
+                subheader="Received, in process"
               />
             </CardContent>
             <CardActions>
@@ -97,11 +108,46 @@ export default class Orientation extends Component {
             </CardActions>
             <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
               <CardContent>
-                "More placeholder text."
+                "We’ve received your Housing Information Questionnaire, 
+                and the Housing Director will be working to accommodate 
+                your housing request. Assignments will be confirmed by 
+                Gordon email starting in mid-summer. Contact Housing@gordon.edu 
+                if you need to update your information, or if you have a question."
               </CardContent>
             </Collapse>
           </Card>
         </Grid>
+        }
+        else if (residenceAvatar=='red-avatar')
+        {
+          <Grid item xs={12}>
+          <Card>
+            <CardContent>
+               <CardHeader
+                avatar={<Avatar className={residenceAvatar} />}
+                title="Residence Hall Assignment"
+                subheader="Completed!"
+              />
+            </CardContent>
+            <CardActions>
+              <IconButton
+                onClick={this.handleExpandClick}
+                aria-expanded={this.state.expanded}
+                aria-label="Show more"
+              >
+                <ExpandMoreIcon />
+              </IconButton>
+            </CardActions>
+            <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+              <CardContent>
+                Complete the Housing Information Questionnaire. //hyperlink to questionnaire as found in google doc
+                This provides information to the Housing Director about your 
+                on-campus housing, or your request to be a commuting student.
+              </CardContent>
+            </Collapse>
+          </Card>
+        </Grid>
+        }
       </Grid>
     );
   }
