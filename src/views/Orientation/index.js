@@ -3,12 +3,13 @@ import Card, { CardContent, CardHeader, CardActions, CardText } from 'material-u
 import React, { Component } from 'react';
 import Collapse from 'material-ui/transitions/Collapse';
 import Avatar from 'material-ui/Avatar';
+import Subheader from 'material-ui/List/ListSubheader';
+import Text from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import { LinearProgress } from 'material-ui/Progress';
 
 import './orientation.css';
-import { Subheader } from 'material-ui/Subheader';
 
 export default class Orientation extends Component {
   state = { expanded: false };
@@ -27,23 +28,23 @@ export default class Orientation extends Component {
       let tasksTotal = Math.round(Math.random() * 100);
       if (tasksTotal < tasksComplete) tasksComplete = tasksTotal;
 
-      if ((surveyStatus==true)&&(requestProcessed==true))
+      if ((surveyStatus===true)&&(requestProcessed===true))
       {
           residenceAvatar = 'green-avatar';
           residenceSubheader = 'Completed!';
           residenceText = "Your housing assignment has been made! /*[insert housing string here?] [Welcome to _____ Hall!]*/ Contact Housing@gordon.edu if you need to update your information, or if you have a question.";
       }
-      else if((surveyStatus==true)&&(requestProcessed==false))
+      else if((surveyStatus===true)&&(requestProcessed===false))
       {
         residenceAvatar = 'yellow-avatar';
         residenceSubheader = 'Received, in process';
         residenceText = "We’ve received your Housing Information Questionnaire, and the Housing Director will be working to accommodate your housing request. Assignments will be confirmed by Gordon email starting in mid-summer. Contact Housing@gordon.edu if you need to update your information, or if you have a question.";
       }
-      else if(surveyStatus==false)
+      else if(surveyStatus===false)
       {
           residenceAvatar = 'red-avatar';
           residenceSubheader = 'Not yet complete.';
-          residenceText = "Complete the Housing Information Questionnaire. /*hyperlink to questionnaire as found in google doc*/ This provides information to the Housing Director about your on-campus housing, or your request to be a commuting student.";
+          residenceText = "Complete the"; //<a href={"www.gordon.edu/housing"}Housing Information Questionnaire </a> ". This provides information to the Housing Director about your on-campus housing, or your request to be a commuting student.";
       }
       
 
@@ -93,4 +94,3 @@ export default class Orientation extends Component {
     );
   }
 }
-
