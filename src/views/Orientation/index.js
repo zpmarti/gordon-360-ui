@@ -8,6 +8,7 @@ import Text from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import { LinearProgress } from 'material-ui/Progress';
+import Button from 'material-ui/Button';
 
 import './orientation.css';
 
@@ -24,6 +25,7 @@ export default class Orientation extends Component {
       let residenceText;
       let surveyStatus;
       let requestProcessed;
+      let buttonExists; // for the Hyperlink of the Housing survey
       let tasksComplete = Math.round(Math.random() * 100);
       let tasksTotal = Math.round(Math.random() * 100);
       if (tasksTotal < tasksComplete) tasksComplete = tasksTotal;
@@ -44,9 +46,10 @@ export default class Orientation extends Component {
       {
           residenceAvatar = 'red-avatar';
           residenceSubheader = 'Not yet complete.';
-          residenceText = "Complete the"; //<a href={"www.gordon.edu/housing"}Housing Information Questionnaire </a> ". This provides information to the Housing Director about your on-campus housing, or your request to be a commuting student.";
+          buttonExists = true;
+          residenceText = "Complete the Housing . This provides information to the Housing Director about your on-campus housing, or your request to be a commuting student.";
       }
-      
+
 
     return (
       <Grid container justify="center">
@@ -68,7 +71,7 @@ export default class Orientation extends Component {
             <CardContent>
                <CardHeader
                 avatar={<Avatar className={residenceAvatar} />}
-                title="Residence Hall Assigned"
+                title="Residence Hall"
                 subheader={<Subheader className={residenceSubheader} />}
               />
             </CardContent>
@@ -83,6 +86,11 @@ export default class Orientation extends Component {
             </CardActions>
             <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
               <CardContent>
+                <IconButton
+                  // if buttonExists === true, include the button. (only true for 'false')
+                  classes={{ root: 'survey-button'}}
+                  a href={'www.gordon.edu/housing'}Housing Information Questionnaire
+                >
                 <CardText
                 text={<Text className={residenceText}/>}
                 />
