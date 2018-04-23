@@ -86,14 +86,14 @@ export default class Orientation extends Component {
             </CardActions>
             <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
               <CardContent>
-                <IconButton
+                {/* <IconButton
                   // if buttonExists === true, include the button. (only true for 'false')
                   classes={{ root: 'survey-button'}}
                   a href={'www.gordon.edu/housing'}Housing Information Questionnaire
-                >
-                <CardText
-                text={<Text className={residenceText}/>}
-                />
+                > */}
+                <CardText>
+                {residenceText}
+                </CardText>
               </CardContent>
             </Collapse>
           </Card>
