@@ -73,6 +73,7 @@ export default class GordonActivitiesAll extends Component {
     };
   }
   render() {
+    console.log(this.state.sessions);
     if (this.state.error) {
       throw this.state.error;
     }

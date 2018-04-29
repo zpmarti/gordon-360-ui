@@ -20,7 +20,8 @@ import Dialog, {
   DialogContentText,
   DialogContent,
 } from 'material-ui/Dialog';
-import { Cropper } from 'react-image-cropper';
+import Cropper from 'react-cropper';
+import 'cropperjs/dist/cropper.css';
 
 export default class Profile extends Component {
   constructor(props) {
@@ -55,11 +56,10 @@ export default class Profile extends Component {
     this.setState({ open: false });
   };
 
-  handelCrop = () => {
-    let image = this.cropper.props.src;
-    this.setState({ preview: image });
-  };
-
+  _crop() {
+    // image in dataUrl
+    console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
+  }
   changePrivacy() {
     if (this.state.button === 'Make Public') {
       this.setState({ button: 'Make Private' });
@@ -69,7 +69,7 @@ export default class Profile extends Component {
   }
   onDrop(preview) {
     this.setState({ preview });
-    console.log(preview);
+    console.log(this.state.preview);
   }
 
   componentWillMount() {
@@ -102,9 +102,7 @@ export default class Profile extends Component {
 
   render() {
     const { preview } = this.state;
-    if (preview !== null) {
-      console.log(preview[0].preview);
-    }
+
     const style = {
       width: '100%',
     };
@@ -147,22 +145,24 @@ export default class Profile extends Component {
       </Dropzone>
     );
     if (preview) {
+      console.log('preview');
       content = (
         <Cropper
-          src={preview[0].preview}
-          ref={ref => {
-            this.cropper = ref;
-          }}
+          src={this.preview}
+          ref="cropper"
+          style={{ height: 400, width: '100%' }}
+          // Cropper.js options
+          aspectRatio={1 / 1}
+          guides={false}
         />
       );
       // let image = this.cropper.crop();
-      console.log(this.cropper);
       actions = (
         <div>
           <Button onClick={this.handleClose} raised style={button}>
             Cancel
           </Button>
-          <Button onClick={this.handelCrop} raised style={button}>
+          <Button onClick={this._crop} raised style={button}>
             Crop
           </Button>
         </div>

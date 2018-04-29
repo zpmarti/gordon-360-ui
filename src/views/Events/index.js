@@ -66,6 +66,7 @@ export default class Events extends Component {
   }
   render() {
     let content;
+    console.log(this.state.events);
     if (this.state.loading === true) {
       content = <GordonLoader />;
     } else if (this.state.events) {
