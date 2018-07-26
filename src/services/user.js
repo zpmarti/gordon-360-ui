@@ -167,6 +167,17 @@ import gordonEvent from './event';
  * @property {String} PersonType Type of person
  */
 
+/**
+ * @global
+ * @typedef DiningInfo
+ * @property {String} MealChoiceID Choice of meal plan(A1, A2, AW, M1, M2, M3, MM, S1)
+ * @property {Array.<String>} PlanIDs IDs of the indavidual plans
+ * @property {Array.<String>} ChoiceDescription Description for the meal plan chosen
+ * @property {Array.<String>} PlanDescriptions Descriptions for the indivilual plans
+ * @property {Array.<String>} InitialBalance Array of starting balances for each individual plan
+ * @property {Array.<String>} CurrentBalance Array of current balances for each individual plan
+ */
+
 function formatName(profile) {
   profile.fullName = `${profile.FirstName}  ${profile.LastName}`;
   return profile;
@@ -388,6 +399,19 @@ const getChapelCredits = async () => {
 };
 
 /**
+ * Get all relevant info about user's dining plan
+ * @return {Promise.<DiningInfo>} An object containing dining plan information
+ */
+const getDiningInfo = async () => {
+  console.log('getDiningInfo()');
+
+  const id = 999999001;
+  const { SessionCode: sessionCode } = await session.getCurrent();
+  console.log(id + ' ' + sessionCode);
+  return await http.get(`dining/${id}/${sessionCode}`);
+};
+
+/**
  * Get user profile info for a given user or the current user if `username` is not provided
  * @param {String} [username] Username in firstname.lastname format
  * @return {Promise.<StaffProfileInfo|StudentProfileInfo>} Profile info
@@ -577,6 +601,7 @@ export default {
   getChapelCredits,
   getImage,
   getLocalInfo,
+  getDiningInfo,
   getPublicMemberships,
   getMembershipsAlphabetically,
   getCurrentMemberships,
