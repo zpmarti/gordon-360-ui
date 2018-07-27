@@ -21,22 +21,28 @@ export default class DiningBalance extends Component {
   }
 
   async loadData() {
+    let initBal = [];
+    let currBal = [];
     const diningInfo = await user.getDiningInfo();
-    this.setState({
-      initBalance: diningInfo.InitialBalance,
-      currentBalance: diningInfo.CurrentBalance,
-    });
+    console.log(diningInfo);
+    for (let i = 0; i < diningInfo.length; i += 1) {
+      initBal.push(diningInfo[i].InitialBalance);
+      currBal.push(diningInfo[i].CurrentBalance);
+
+      this.setState({
+        initBalance: initBal,
+        currentBalance: currBal,
+      });
+    }
   }
 
   render() {
-    console.log(this.state.initBalance);
+    const diningStuff = this.state.currentBalance.map(result => <Typography>{result}</Typography>);
     console.log(this.state.currentBalance);
     return (
       <Card>
         <Typography>Dining Balance</Typography>
-        <Typography>
-          {this.state.initBalance} {this.state.currentBalance}
-        </Typography>
+        {diningStuff}
       </Card>
     );
   }

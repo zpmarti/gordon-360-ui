@@ -170,12 +170,10 @@ import gordonEvent from './event';
 /**
  * @global
  * @typedef DiningInfo
- * @property {String} MealChoiceID Choice of meal plan(A1, A2, AW, M1, M2, M3, MM, S1)
- * @property {Array.<String>} PlanIDs IDs of the indavidual plans
- * @property {Array.<String>} ChoiceDescription Description for the meal plan chosen
- * @property {Array.<String>} PlanDescriptions Descriptions for the indivilual plans
- * @property {Array.<String>} InitialBalance Array of starting balances for each individual plan
- * @property {Array.<String>} CurrentBalance Array of current balances for each individual plan
+ * @property {String} ChoiceDescription Description for the meal plan chosen
+ * @property {String} PlanDescriptions Descriptions for the indivilual plans
+ * @property {String} InitialBalance Array of starting balances for each individual plan
+ * @property {String} CurrentBalance Array of current balances for each individual plan
  */
 
 function formatName(profile) {
@@ -400,13 +398,12 @@ const getChapelCredits = async () => {
 
 /**
  * Get all relevant info about user's dining plan
- * @return {Promise.<DiningInfo>} An object containing dining plan information
+ * @return {Promise.<DiningInfo[]>} An array of objects containing dining plan information
  */
 const getDiningInfo = async () => {
-  console.log('getDiningInfo()');
-
   const id = 999999001;
-  const { SessionCode: sessionCode } = await session.getCurrent();
+  //const { SessionCode: sessionCode } = await session.getCurrent();
+  const sessionCode = '201809';
   console.log(id + ' ' + sessionCode);
   return await http.get(`dining/${id}/${sessionCode}`);
 };
