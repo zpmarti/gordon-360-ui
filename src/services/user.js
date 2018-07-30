@@ -401,11 +401,14 @@ const getChapelCredits = async () => {
  * @return {Promise.<DiningInfo[]>} An array of objects containing dining plan information
  */
 const getDiningInfo = async () => {
-  const id = 999999001;
+  const id = 999999003;
+  //const id = 40000097;
+  //const { id } = getLocalInfo();
   //const { SessionCode: sessionCode } = await session.getCurrent();
   const sessionCode = '201809';
-  console.log(id + ' ' + sessionCode);
-  return await http.get(`dining/${id}/${sessionCode}`);
+  const role = getLocalInfo().college_role;
+  console.log(id + ' ' + sessionCode + ' ' + role);
+  return await http.get(`dining/${role}/${id}/${sessionCode}`);
 };
 
 /**

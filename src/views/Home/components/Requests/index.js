@@ -77,7 +77,7 @@ export default class Requests extends Component {
     // For each involvement leading, render RequestsReceived component
     // which will render the individual requests
     received = this.state.involvementsLeading.map(involvement => (
-      <Grid item>
+      <Grid item key={involvement.ActivityCode}>
         <ExpansionPanel defaultExpanded>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography variant="title">{involvement.ActivityDescription}</Typography>

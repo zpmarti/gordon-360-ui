@@ -68,7 +68,7 @@ export default class RequestReceived extends Component {
         .slice(0)
         .reverse()
         .map(request => (
-          <Grid item xs={12}>
+          <Grid item xs={12} key={request.RequestID}>
             <Grid container spacing={8}>
               <Grid item xs={12}>
                 <Grid container direction="row">
