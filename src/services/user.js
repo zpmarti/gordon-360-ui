@@ -178,6 +178,17 @@ import gordonEvent from './event';
 
 /**
  * @global
+ * @typedef JobsInfo
+ * @property {String} Job_Title
+ * @property {String} Job_Department
+ * @property {String} Job_Department_Name
+ * @property {String} Job_Start_Date
+ * @property {String} Job_End_Date
+ * @property {String} Job_Expected_End_Date
+ */
+
+/**
+ * @global
  * @typedef MealPlanComponent
  * @property {String} PlanDescription Description of the meal plan component
  * @property {String} PlanID
@@ -410,15 +421,20 @@ const getChapelCredits = async () => {
  * @return {Promise.<DiningInfo>} Dining plan info object
  */
 const getDiningInfo = async () => {
-  //const id = 999999003;
-  //const id = 999999001;
-  //const id = 40000097;
   const { id } = getLocalInfo();
   const { SessionCode: sessionCode } = await session.getCurrent();
-  //const sessionCode = '201809';
   const role = getLocalInfo().college_role;
-  //console.log(id + ' ' + sessionCode + ' ' + role);
   return await http.get(`dining/${role}/${id}/${sessionCode}`);
+};
+
+/**
+ * Get all student job information
+ * @param {Number} id student's id
+ * @return {Promise.<JobsInfo[]>} List of student's jobs
+ */
+const getJobs = async () => {
+  const { id } = getLocalInfo();
+  return await http.get(`jobs/${id}`);
 };
 
 /**
@@ -627,6 +643,7 @@ export default {
   getImage,
   getLocalInfo,
   getDiningInfo,
+  getJobs,
   getPublicMemberships,
   getMembershipsAlphabetically,
   getCurrentMemberships,
