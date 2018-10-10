@@ -16,7 +16,7 @@ import IconButton from 'material-ui/IconButton';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import { LinearProgress } from 'material-ui/Progress';
 import http from '../../services/http';
-import user from '../../services/user.js';
+import user from '../../services/user';
 
 import './orientation.css';
 
@@ -30,6 +30,7 @@ export default class Orientation extends Component {
   render() {
     // Data Checks
 
+    let username = user.getProfileInfo.user_name
     let idPhotoAvatar;
     let idPhotoSubheader;
     let idPhotoBody;
@@ -41,7 +42,7 @@ export default class Orientation extends Component {
     if (tasksTotal < tasksComplete) tasksComplete = tasksTotal;
 
     // ID Photo uploaded
-    if (http.get(`orientation/photo/${user.LocalInfo.user_name}`)) {
+    if (http.get(`orientation/photo/${username}`)) {
       idPhotoAvatar = 'green-avatar';
       idPhotoSubheader = 'Completed!';
       idPhotoBody = "We’ve received your ID photo." +
