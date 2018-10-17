@@ -1,9 +1,18 @@
 import About from './views/About';
 import ActivitiesAll from './views/ActivitiesAll';
 import ActivityEdit from './views/ActivityEdit';
+import ActivityProfile from './views/ActivityProfile';
 import Home from './views/Home';
 import Help from './views/Help';
 import Orientation from './views/Orientation';
+import CoCurricularTranscript from './views/CoCurricularTranscript';
+import Events from './views/Events';
+import EventsAttended from './views/EventsAttended';
+import Profile from './views/Profile';
+import MyProfile from './views/MyProfile';
+import Feedback from './views/Feedback';
+import PeopleSearch from './views/PeopleSearch';
+import ProfileNotFound from './views/ProfileNotFound';
 
 // Route order must be from most specific to least specific (i.e. `/user/:username` before `/user`)
 export default [
@@ -19,13 +28,18 @@ export default [
     component: About,
   },
   {
-    name: 'Edit Activity',
+    name: 'Edit Involvement',
     path: '/activity/:activityId/edit',
     component: ActivityEdit,
   },
   {
-    name: 'Activities',
-    path: '/activities',
+    name: 'Involvement Profile',
+    path: '/activity/:sessionCode/:activityCode',
+    component: ActivityProfile,
+  },
+  {
+    name: 'Involvements',
+    path: '/involvements',
     component: ActivitiesAll,
   },
   {
@@ -37,5 +51,45 @@ export default [
     name: 'Orientation',
     path: '/orient',
     component: Orientation,
+  },
+  {
+    name: 'Transcript',
+    path: '/transcript',
+    component: CoCurricularTranscript,
+  },
+  {
+    name: 'Events',
+    path: '/events',
+    component: Events,
+  },
+  {
+    name: 'Attended',
+    path: '/attended',
+    component: EventsAttended,
+  },
+  {
+    name: 'Feedback',
+    path: '/feedback',
+    component: Feedback,
+  },
+  {
+    name: 'Not Found',
+    path: '/profile/null',
+    component: ProfileNotFound,
+  },
+  {
+    name: 'Profile',
+    path: '/profile/:username',
+    component: Profile,
+  },
+  {
+    name: 'My Profile',
+    path: '/myprofile/:username',
+    component: MyProfile,
+  },
+  {
+    name: 'People',
+    path: '/people',
+    component: PeopleSearch,
   },
 ];

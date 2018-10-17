@@ -1,4 +1,4 @@
-import createMuiTheme from 'material-ui/styles/createMuiTheme';
+import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 
 // Colors from http://www.gordon.edu/brandstandards
 // Shades from https://goo.gl/AF45tZ
@@ -94,6 +94,9 @@ const theme = createMuiTheme({
     secondary: gordonColors.primary.cyanShades,
     error: gordonColors.secondary.redShades,
     grey: gordonColors.neutral.grayShades,
+  },
+  typography: {
+    fontFamily: ['Gotham SSm 7r', 'Gotham SSm A', 'Gotham SSm B', 'sans-serif'].join(','),
   },
 });
 

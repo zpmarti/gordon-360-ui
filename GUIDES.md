@@ -1,5 +1,15 @@
 # Guides
 
+## Code Style
+
+This project uses [Prettier](https://prettier.io/), an "opinionated code formatter," to automatically format JavaScript, JSON, Sass, and Markdown files according to a common style.
+
+The advantage of using a code formatter is consistency between developers. Using ESLint with a strict style guide is one approach to consistency, but it still requires developer effort to fix code according to the ESLint rules. Prettier takes care of this without any effort from the developers.
+
+Prettier is used as a pre commit hook in this repository. This means that it will automatically format any staged code before it is committed. It can also be used as an [extension for your editor](https://prettier.io/docs/en/editors.html). This repository includes a setup for VS Code: when the extension is installed, files will be formatted automatically every time they are saved.
+
+ESLint and Stylelint are used in conjunction with Prettier to catch syntax errors, but not to check code style - that is taken care of solely by Prettier.
+
 ## Dependencies
 
 ### Installing Dependencies
@@ -137,10 +147,27 @@ Similar to component folders, a view folder can have its own `components` folder
 
 ## Environment Variables
 
-Environment-specific variables are located in the root directory of the project in the files `.env` and `.env.production`.  `.env` contains variables for local development and testing. `.env.production` contains overrides of those variables specific to the production environments (360 and 360Train).
+Environment-specific variables are located in the root directory of the project in the files `.env` and `.env.production`. `.env` contains variables for local development and testing. `.env.production` contains overrides of those variables specific to the production environments (360 and 360Train).
 
 To declare variables that should not be checked in to version control, create a file in the root directory called `.env.local`. This file will be ignored by git.
 
 These files are loaded by the scripts that run the development server and build the application. Variables in these files are available globally in the app as `process.env.REACT_APP_VARIABLE_NAME` (assuming one of the `.env` files contains the line `REACT_APP_VARIABLE_NAME=some-value`).
 
 Environment variables must be declared in all caps, must use snake case, and must begin with `REACT_APP_` (ex: `REACT_APP_API_URL` or `REACT_APP_PASSWORD`). Any environment variables that do not begin with `REACT_APP_` will be ignored.
+
+## Deployment
+
+The deployment script `./scripts/deploy.sh` requires several environment variables to be defined in the Travis CI environment. These variables are documented at the top of the deployment script.
+
+The script deploys to either staging or production based on the branch it is running from. The `develop` branch deploys to staging, while the `master` branch deploys to production.
+
+`develop` is the default branch on the repository, so all branches should be based on it and should merge back into it. Changes merged into `develop` will automatically deploy to the staging environment.
+
+### Deploying to Production
+
+1. On the [repository's home page on GitHub](https://github.com/gordon-cs/gordon-360-ui), click "New pull request."
+1. Change the "base" branch of the pull request to `master`. The "compare" branch should be set to `develop` by default.
+1. Enter a title starting with "RELEASE:" (optional, but useful for quickly finding releases in the Git history) and containing a brief summary of the changes that the release brings.
+1. Add reviewers. The pull request must be approved before it can be merged.
+1. Click "Create pull request."
+1. When the pull request is approved, merge it. This will trigger a build that will automatically deploy `master` to production.

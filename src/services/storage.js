@@ -13,7 +13,9 @@
  * @param {String} key Where to store the value
  * @param {any} value Data to store
  */
-const store = (key, value) => { localStorage.setItem(key, JSON.stringify(value)); };
+const store = (key, value) => {
+  localStorage.setItem(key, JSON.stringify(value));
+};
 
 /**
  * Get a value stored locally
@@ -21,7 +23,7 @@ const store = (key, value) => { localStorage.setItem(key, JSON.stringify(value))
  * @return {any} Stored value
  * @throws Will throw an error when the key is not set in local storage
  */
-const get = (key) => {
+const get = key => {
   const storedValue = localStorage.getItem(key);
   if (storedValue === null) {
     throw new Error(`Key '${key}' does not exist in local storage`);
@@ -33,7 +35,6 @@ const get = (key) => {
   } catch (err) {
     throw new Error(`Could not parse value stored at '${key}'`);
   }
-
   return value;
 };
 
@@ -41,7 +42,9 @@ const get = (key) => {
  * Remove a value stored locally
  * @param {String} key Where value is stored
  */
-const remove = (key) => { localStorage.removeItem(key); };
+const remove = key => {
+  localStorage.removeItem(key);
+};
 
 export default {
   get,

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import Card, { CardContent, CardHeader } from 'material-ui/Card';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
 import { Doughnut, defaults } from 'react-chartjs-2';
 
 import { gordonColors } from '../../../../theme';
@@ -45,10 +47,7 @@ export default class DaysLeft extends Component {
       const pastDays = this.state.daysLeft[1] - daysleft;
       const data = {
         datasets: [{ data: [pastDays, daysleft], backgroundColor: [gordonColors.primary.blue] }],
-        labels: [
-          'Days Finished',
-          'Days Remaining',
-        ],
+        labels: ['Days Finished', 'Days Remaining'],
       };
       const options = {
         options: {
@@ -64,12 +63,9 @@ export default class DaysLeft extends Component {
     return (
       <Card>
         <CardContent>
-          <CardHeader
-            title="Days Left"
-            subheader={subheader}
-          />
+          <CardHeader title="Days Left" subheader={subheader} />
           {content}
-        </CardContent >
+        </CardContent>
       </Card>
     );
   }

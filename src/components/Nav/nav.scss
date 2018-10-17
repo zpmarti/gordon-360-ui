@@ -5,6 +5,7 @@
     .drawer {
       position: fixed;
       width: $drawer-width-md;
+      display: none;
     }
   }
 }
@@ -14,8 +15,7 @@
   width: $drawer-width-xs;
 }
 
-.gordon-nav .drawer, // sass-lint:disable-line force-element-nesting
+.gordon-nav .drawer,
 .gordon-nav-drawer {
-  // sass-lint:disable-block no-important
-  background-color: $neutral-light-gray !important; // Must be `important` to override on mobile
+  background-color: #fff !important; // Must be `important` to override on mobile
 }

@@ -1,55 +1,86 @@
-import Grid from 'material-ui/Grid';
-import Card, { CardContent, CardHeader, CardActions, CardText } from 'material-ui/Card';
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardActions from '@material-ui/core/CardActions';
+import Typography from '@material-ui/core/Typography';
 import React, { Component } from 'react';
-import Collapse from 'material-ui/transitions/Collapse';
-import Avatar from 'material-ui/Avatar';
-import Subheader from 'material-ui/List/ListSubheader';
-import Text from 'material-ui/List';
-import IconButton from 'material-ui/IconButton';
-import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
-import { LinearProgress } from 'material-ui/Progress';
-import Button from 'material-ui/Button';
+import Collapse from '@material-ui/core/Collapse';
+import Avatar from '@material-ui/core/Avatar';
+import ListItemText from '@material-ui/core/ListItemText';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Button from '@material-ui/core/Button';
+import { gordonColors } from '../../theme';
+import residence from '../../services/residence.js';
 
 import './orientation.css';
 
 export default class Orientation extends Component {
-  state = { expanded: false };
+  state = {
+    expanded: false,
+  };
 
   handleExpandClick = () => {
     this.setState({ expanded: !this.state.expanded });
-  }
+  };
 
   render() {
-      let residenceAvatar;
-      let residenceSubheader;
-      let residenceText;
-      let surveyStatus;
-      let requestProcessed;
-      let buttonExists; // for the Hyperlink of the Housing survey
-      let tasksComplete = Math.round(Math.random() * 100);
-      let tasksTotal = Math.round(Math.random() * 100);
-      if (tasksTotal < tasksComplete) tasksComplete = tasksTotal;
+    const style = {
+      img: {
+        width: '200px',
+        height: '200px',
+      },
 
-      if ((surveyStatus===true)&&(requestProcessed===true))
-      {
-          residenceAvatar = 'green-avatar';
-          residenceSubheader = 'Completed!';
-          residenceText = "Your housing assignment has been made! /*[insert housing string here?] [Welcome to _____ Hall!]*/ Contact Housing@gordon.edu if you need to update your information, or if you have a question.";
-      }
-      else if((surveyStatus===true)&&(requestProcessed===false))
-      {
-        residenceAvatar = 'yellow-avatar';
-        residenceSubheader = 'Received, in process';
-        residenceText = "We’ve received your Housing Information Questionnaire, and the Housing Director will be working to accommodate your housing request. Assignments will be confirmed by Gordon email starting in mid-summer. Contact Housing@gordon.edu if you need to update your information, or if you have a question.";
-      }
-      else if(surveyStatus===false)
-      {
-          residenceAvatar = 'red-avatar';
-          residenceSubheader = 'Not yet complete.';
-          buttonExists = true;
-          residenceText = "Complete the Housing . This provides information to the Housing Director about your on-campus housing, or your request to be a commuting student.";
-      }
+      centerGridContainer: {
+        position: 'absolute',
+        top: '50%',
+        transform: 'translateY(-50%)',
+      },
 
+      button: {
+        background: gordonColors.primary.cyan,
+        color: 'white',
+      },
+      uncontainedButton: {
+        color: gordonColors.primary.cyan,
+      },
+    };
+    let residenceAvatar;
+    let residenceSubheader;
+    let residenceText;
+    //let surveyCompleted = false; surveyCompleted will be added back in when we have the ability to check it. (We'd need to check if any of the 4 residence hall surveys were completed.)
+    let housingButton;
+    let tasksComplete = 5;
+    let tasksTotal = 10;
+    if (tasksTotal < tasksComplete) tasksComplete = tasksTotal;
+
+    if (/*(surveyCompleted === true) && */ residence.requestProcessed()) {
+      residenceAvatar = 'green-avatar';
+      residenceSubheader = 'Completed!';
+      residenceText =
+        'Your housing assignment has been made! ' /*[insert housing string here?] [Welcome to _____ Hall!]*/ +
+        'Contact Housing@gordon.edu if you need to update your information, or if you have a question.';
+    }
+    // else if ((surveyCompleted === true) && (requestProcessed === false)) {
+    //   residenceAvatar = 'yellow-avatar';
+    //   residenceSubheader = 'Received, in process';
+    //   residenceText = "We’ve received your Housing Information Questionnaire, and the Housing Director will be working to accommodate your housing request. Assignments will be confirmed by Gordon email starting in mid-summer. Contact Housing@gordon.edu if you need to update your information, or if you have a question.";
+    // }
+    else if (!residence.requestProcessed()) {
+      /*surveyCompleted === false-- won't work without the data that I don't have.*/
+      residenceAvatar = 'red-avatar';
+      residenceSubheader = 'Not yet complete.';
+      housingButton = (
+        <a href={'https://www.gordon.edu/housingquestionnaire'} className="icon" target="_blank">
+          <Button style={style.uncontainedButton}> Housing Information Questionnaire </Button>
+        </a>
+      );
+      residenceText =
+        'Complete the Housing Questionnaire. This provides information to the Housing Director about your on-campus housing, or your request to be a commuting student.';
+    }
 
     return (
       <Grid container justify="center">
@@ -61,39 +92,37 @@ export default class Orientation extends Component {
             </figcaption>
             <LinearProgress
               className="orientation-progress"
-              mode="determinate"
-              value={tasksComplete / tasksTotal *100}
+              variant="determinate"
+              value={(tasksComplete / tasksTotal) * 100}
             />
           </figure>
         </Grid>
+
         <Grid item xs={12}>
           <Card>
             <CardContent>
-               <CardHeader
+              <CardHeader
                 avatar={<Avatar className={residenceAvatar} />}
                 title="Residence Hall"
-                subheader={<Subheader className={residenceSubheader} />}
+                subheader={<ListItemText className={residenceSubheader} />}
               />
             </CardContent>
             <CardActions>
-              <IconButton
-                onClick={this.handleExpandClick}
-                aria-expanded={this.state.expanded}
-                aria-label="Show more"
-              >
-                <ExpandMoreIcon />
-              </IconButton>
+              <ExpansionPanel>
+                <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  onClick={this.handleExpandClick}
+                  aria-expanded={this.state.expanded}
+                  aria-label="Show more"
+                />
+              </ExpansionPanel>
             </CardActions>
             <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
               <CardContent>
-                {/* <IconButton
-                  // if buttonExists === true, include the button. (only true for 'false')
-                  classes={{ root: 'survey-button'}}
-                  a href={'www.gordon.edu/housing'}Housing Information Questionnaire
-                > */}
-                <CardText>
-                {residenceText}
-                </CardText>
+                <Grid item xs={6}>
+                  {housingButton}
+                </Grid>
+                <Typography>{residenceText}</Typography>
               </CardContent>
             </Collapse>
           </Card>
