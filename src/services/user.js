@@ -434,7 +434,8 @@ const getDiningInfo = async () => {
  */
 const getJobs = async () => {
   const { id } = getLocalInfo();
-  return await http.get(`jobs/${id}`);
+  const jobs = await http.get(`jobs/${id}`);
+  return jobs;
 };
 
 /**

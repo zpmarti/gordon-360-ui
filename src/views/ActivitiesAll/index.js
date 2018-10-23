@@ -3,6 +3,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import GridList from '@material-ui/core/GridList';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import React, { Component } from 'react';
@@ -29,6 +30,7 @@ export default class GordonActivitiesAll extends Component {
       activities: [],
       allActivities: [],
       myInvolvements: [],
+      jobs: [],
       error: null,
       loading: true,
       search: '',
@@ -52,12 +54,14 @@ export default class GordonActivitiesAll extends Component {
         session.getAll(),
       ]);
       const myInvolvements = await user.getCurrentMembershipsWithoutGuests(profile.ID);
+      const jobs = await user.getJobs();
 
       this.setState({
         profile,
         activities,
         allActivities: activities,
         myInvolvements: myInvolvements,
+        jobs,
         loading: false,
         sessions,
         types,
@@ -97,6 +101,7 @@ export default class GordonActivitiesAll extends Component {
 
     let allInvolvements;
     let myInvolvements;
+    let myJobs;
     let involvementsHeading;
     let noInvolvementsText;
 
@@ -129,6 +134,14 @@ export default class GordonActivitiesAll extends Component {
         />
       );
     }
+
+    myJobs = this.state.jobs.map(job => (
+      <GridList cellHeight={250} spacing="16" cols={2} className="gordon-activity-grid">
+        <div className="container">
+          <div className="item-title">{job.Job_Title}</div>
+        </div>
+      </GridList>
+    ));
 
     const sessionOptions = this.state.sessions.map(
       ({ SessionDescription: description, SessionCode: code }) => (
@@ -209,6 +222,22 @@ export default class GordonActivitiesAll extends Component {
 
           <Grid item xs={12} lg={8}>
             {myInvolvements}
+          </Grid>
+
+          <Grid item xs={12} lg={8} fullWidth>
+            <Card>
+              <div style={headerStyle}>
+                <Typography variant="body2" style={headerStyle}>
+                  MY {involvementsHeading} JOBS
+                </Typography>
+              </div>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} lg={8}>
+            <GridList cellHeight={250} spacing="16" className="gordon-activity-grid">
+              {myJobs}
+            </GridList>
           </Grid>
 
           <Grid item xs={12} lg={8}>
