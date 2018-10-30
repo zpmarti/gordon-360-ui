@@ -94,6 +94,16 @@ export default class GordonActivitiesAll extends Component {
       await this.setState({ activities: activity.filter(allActivities, type, search) });
     };
   }
+
+  //Extract actual position title from Job_Title(which usually includes the department name as well)
+  parseJobTitle(job) {
+    const pos = job.Job_Title.search(job.Job_Department_Name);
+    if (pos === -1) {
+      return job.Job_Title;
+    }
+    return job.Job_Title.substring(job.Job_Department_Name.length + 2);
+  }
+
   render() {
     if (this.state.error) {
       throw this.state.error;
@@ -138,7 +148,9 @@ export default class GordonActivitiesAll extends Component {
     myJobs = this.state.jobs.map(job => (
       <GridList cellHeight={250} spacing="16" cols={2} className="gordon-activity-grid">
         <div className="container">
-          <div className="item-title">{job.Job_Title}</div>
+          <div className="item-title">
+            {job.Job_Department_Name + ' - ' + this.parseJobTitle(job)}
+          </div>
         </div>
       </GridList>
     ));
