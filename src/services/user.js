@@ -282,6 +282,14 @@ function setClass(profile) {
 
   return profile;
 }
+/**
+ * Set office_hours of a facstaff profile
+ * @param {String} newHours the new hours the facstaff is inputting
+ * @return {Response} response of http request
+ */
+const postOfficeHours = newHours => {
+  return http.post('profiles/office_hours');
+};
 
 /**
  * Get chapel events attended by the user
