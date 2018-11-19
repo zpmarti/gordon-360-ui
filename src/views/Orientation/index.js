@@ -27,10 +27,20 @@ export default class Orientation extends Component {
     this.setState({ expanded: !this.state.expanded });
   };
 
+  async componentWillMount() {
+    const { name, user_name: username } = user.getLocalInfo();
+    this.setState({ name, username });
+  }
+
+  async getPhotoInfo(username) {
+    let result = await http.get(`accounts/username/nick.miller`)
+
+    this.setState({ result })
+  }
+
   render() {
     // Data Checks
 
-    let username = user.getProfileInfo.user_name
     let idPhotoAvatar;
     let idPhotoSubheader;
     let idPhotoBody;
@@ -41,10 +51,13 @@ export default class Orientation extends Component {
     let tasksTotal = 2;
     if (tasksTotal < tasksComplete) tasksComplete = tasksTotal;
 
+    let temp = this.getPhotoInfo(this.state.username)
+    console.log(temp)
+
     // ID Photo uploaded
-    if (http.get(`orientation/photo/${username}`)) {
+    if (temp) {
       idPhotoAvatar = 'green-avatar';
-      idPhotoSubheader = 'Completed!';
+      idPhotoSubheader = temp.toString();
       idPhotoBody = "We’ve received your ID photo." +
       " An ID/Access/Meal Plan card will be prepared for your arrival this semester." +
       " It will be available at Check In at your residence, or picked up at Gordon College Police.";
