@@ -4,13 +4,8 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
-import Tooltip from '@material-ui/core/Tooltip';
 import List from '@material-ui/core/List';
-import Dropzone from 'react-dropzone';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
@@ -26,13 +21,12 @@ import LinksDialog from './Components/LinksDialog';
 import { socialMediaInfo } from '../../socialMedia';
 import { Link } from 'react-router-dom';
 import './myProfile.css';
-import Cropper from 'react-cropper';
-import 'cropperjs/dist/cropper.css';
 import GordonLoader from '../../components/Loader';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CloseIcon from '@material-ui/icons/Close';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
+import PhotoUploader from './Components/PhotoUploader';
 
 const CROP_DIM = 200; // pixels
 //MyProfile
@@ -66,6 +60,9 @@ export default class Profile extends Component {
       instagramLink: '',
       isSnackBarOpen: false,
     };
+    // unsure if needed or not vvvv
+    this.onDropAccepted = this.onDropAccepted.bind(this);
+    this.onDropRejected = this.onDropRejected.bind(this);
   }
 
   handlePhotoOpen = () => {
@@ -107,6 +104,10 @@ export default class Profile extends Component {
   handleSocialLinksClose = () => {
     this.setState({ socialLinksOpen: false });
   };
+
+  handlePreviewChange() {
+    this.setState({ preview: null });
+  }
 
   onDialogSubmit(fb, tw, li, ig) {
     // For links that have changed, update this.state
@@ -278,7 +279,12 @@ export default class Profile extends Component {
   }
 
   render() {
-    const { preview } = this.state;
+    const photoOpen = this.state.photoOpen;
+    const aspectRatio = this.state.cropperData.aspectRatio;
+    const cropBoxDim = this.state.cropperData.cropBoxDim;
+    const isImagePublic = this.state.isImagePublic;
+    const preview = this.state.preview;
+    const image = this.state.image;
 
     const style = {
       img: {
@@ -485,151 +491,24 @@ export default class Profile extends Component {
                                 </a>
                               </div>
                             )}
-                            <Dialog
-                              open={this.state.photoOpen}
-                              keepMounted
-                              onClose={this.handleClose}
-                              aria-labelledby="alert-dialog-slide-title"
-                              aria-describedby="alert-dialog-slide-description"
-                              maxWidth="false"
-                            >
-                              <DialogTitle id="simple-dialog-title">
-                                Update Profile Picture
-                              </DialogTitle>
-                              <DialogContent>
-                                <DialogContentText>
-                                  {window.innerWidth < 600
-                                    ? 'Tap Image to Browse Files'
-                                    : 'Drag & Drop Picture, or Click to Browse Files'}
-                                </DialogContentText>
-                                <DialogContentText>
-                                  <br />
-                                </DialogContentText>
-                                {!preview && (
-                                  <Grid container justify="center" spacing="16">
-                                    <Dropzone
-                                      className="dropzone"
-                                      activeClassName="drop-overlay"
-                                      onDropAccepted={this.onDropAccepted.bind(this)}
-                                      onDropRejected={this.onDropRejected.bind(this)}
-                                      accept="image/jpeg,image/jpg,image/png"
-                                    >
-                                      <img
-                                        className="rounded-corners"
-                                        src={`data:image/jpg;base64,${this.state.image}`}
-                                        alt=""
-                                        style={{ 'max-width': '200px', 'max-height': '200px' }}
-                                      />
-                                    </Dropzone>
-                                  </Grid>
-                                )}
-                                {preview && (
-                                  <Grid container justify="center" spacing="16">
-                                    <Cropper
-                                      ref="cropper"
-                                      src={preview}
-                                      style={{
-                                        'max-width': this.maxCropPreviewWidth(),
-                                        'max-height':
-                                          this.maxCropPreviewWidth() /
-                                          this.state.cropperData.aspectRatio,
-                                      }}
-                                      autoCropArea={1}
-                                      viewMode={3}
-                                      aspectRatio={1}
-                                      highlight={false}
-                                      background={false}
-                                      zoom={this.onCropperZoom.bind(this)}
-                                      zoomable={false}
-                                      dragMode={'none'}
-                                      minCropBoxWidth={this.state.cropperData.cropBoxDim}
-                                      minCropBoxHeight={this.state.cropperData.cropBoxDim}
-                                    />
-                                  </Grid>
-                                )}
-                                {preview && <br />}
-                                {preview && (
-                                  <Grid container justify="center" spacing="16">
-                                    <Grid item>
-                                      <Button
-                                        variant="contained"
-                                        onClick={() => this.setState({ preview: null })}
-                                        style={style.button}
-                                      >
-                                        Choose Another Image
-                                      </Button>
-                                    </Grid>
-                                  </Grid>
-                                )}
-                              </DialogContent>
-                              <DialogActions>
-                                <Grid container spacing={8} justify="flex-end">
-                                  <Grid item>
-                                    <Tooltip
-                                      classes={{ tooltip: 'tooltip' }}
-                                      id="tooltip-hide"
-                                      title={
-                                        this.state.isImagePublic
-                                          ? 'Only faculty and police will see your photo'
-                                          : 'Make photo visible to other students'
-                                      }
-                                    >
-                                      <Button
-                                        variant="contained"
-                                        onClick={this.toggleImagePrivacy.bind(this)}
-                                        style={style.button}
-                                      >
-                                        {this.state.isImagePublic ? 'Hide' : 'Show'}
-                                      </Button>
-                                    </Tooltip>
-                                  </Grid>
-                                  <Grid item>
-                                    <Tooltip
-                                      classes={{ tooltip: 'tooltip' }}
-                                      id="tooltip-reset"
-                                      title="Restore your original ID photo"
-                                    >
-                                      <Button
-                                        variant="contained"
-                                        onClick={this.handleResetImage}
-                                        style={{ background: 'tomato', color: 'white' }}
-                                      >
-                                        Reset
-                                      </Button>
-                                    </Tooltip>
-                                  </Grid>
-                                  <Grid item>
-                                    <Button
-                                      variant="contained"
-                                      onClick={this.handleCloseCancel}
-                                      style={style.button}
-                                    >
-                                      Cancel
-                                    </Button>
-                                  </Grid>
-                                  <Grid item>
-                                    <Tooltip
-                                      classes={{ tooltip: 'tooltip' }}
-                                      id="tooltip-submit"
-                                      title="Crop to current region and submit"
-                                    >
-                                      <Button
-                                        variant="contained"
-                                        onClick={this.handleCloseSubmit}
-                                        disabled={!this.state.preview}
-                                        style={
-                                          this.state.preview
-                                            ? style.button
-                                            : { background: 'darkgray', color: 'white' }
-                                        }
-                                      >
-                                        Submit
-                                      </Button>
-                                    </Tooltip>
-                                  </Grid>
-                                </Grid>
-                              </DialogActions>
-                            </Dialog>
+                            <PhotoUploader
+                              photoOpen={photoOpen}
+                              aspectRatio={aspectRatio}
+                              cropBoxDim={cropBoxDim}
+                              image={image}
+                              isImagePublic={isImagePublic}
+                              preview={preview}
+                              onDropRejected={this.onDropRejected}
+                              onDropAccepted={this.onDropAccepted} // something is very wrong here!
+                              handlePreviewChange={this.handlePreviewChange} // something wrong here
+                              maxCropPreviewWidth={this.maxCropPreviewWidth}
+                              handleClose={this.handleClose}
+                              handleCloseSubmit={this.handleCloseSubmit}
+                              handleCloseCancel={this.handleCloseCancel}
+                              toggleImagePrivacy={this.toggleImagePrivacy}
+                              handleResetImage={this.handleResetImage}
+                              onCropperZoom={this.onCropperZoom}
+                            />
                             <Dialog
                               open={this.state.socialLinksOpen}
                               keepMounted
@@ -704,7 +583,8 @@ export default class Profile extends Component {
                         marginBottom: '-4.5pt',
                         marginRight: '1rem',
                       }}
-                    />Success!
+                    />
+                    Success!
                   </span>
                 }
                 action={[
