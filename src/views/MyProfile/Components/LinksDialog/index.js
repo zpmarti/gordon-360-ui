@@ -1,5 +1,4 @@
 import React from 'react';
-
 import FacebookIcon from 'react-icons/lib/fa/facebook';
 import TwitterIcon from 'react-icons/lib/fa/twitter';
 import LinkedInIcon from 'react-icons/lib/fa/linkedin';
