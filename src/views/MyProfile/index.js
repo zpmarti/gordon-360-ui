@@ -521,6 +521,17 @@ export default class Profile extends Component {
                                         style={{ 'max-width': '200px', 'max-height': '200px' }}
                                       />
                                     </Dropzone>
+
+                                    <Dropzone
+                                      className="dropzone"
+                                      activeClassName="drop-overlay"
+                                      onDropAccepted={this.onDropAccepted.bind(this)}
+                                      onDropRejected={this.onDropRejected.bind(this)}
+                                      accept="image/jpeg,image/jpg,image/png"
+                                      spacing="16"
+                                    >
+                                      <h2>ID PHOTO</h2>
+                                    </Dropzone>
                                   </Grid>
                                 )}
                                 {preview && (
@@ -704,7 +715,8 @@ export default class Profile extends Component {
                         marginBottom: '-4.5pt',
                         marginRight: '1rem',
                       }}
-                    />Success!
+                    />
+                    Success!
                   </span>
                 }
                 action={[
