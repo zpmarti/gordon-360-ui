@@ -1,12 +1,7 @@
-import Divider from '@material-ui/core/Divider';
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import activity from '../../../../services/activity';
-import Button from '@material-ui/core/Button';
 
 export default class InvolvementStatusList extends Component {
   render() {
