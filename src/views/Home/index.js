@@ -8,16 +8,18 @@ import DaysLeft from './components/DaysLeft';
 import Requests from './components/Requests';
 import DiningBalance from './components/DiningBalance';
 import user from '../../services/user';
+import victoryPromise from '../../services/victoryPromise';
 
 export default class Home extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { personType: null };
+    this.state = { personType: null, scores: null };
   }
 
   componentWillMount() {
     this.getPersonType();
+    this.getVPScores();
   }
 
   async getPersonType() {
@@ -26,9 +28,16 @@ export default class Home extends Component {
     this.setState({ personType });
   }
 
+  async getVPScores() {
+    const scores = await victoryPromise.getScoreById();
+    this.setState({ scores });
+  }
+
   render() {
     const personType = this.state.personType;
     let doughnut;
+
+    console.log(this.state.scores);
 
     //Only show CL&W credits if user is a student
     if (String(personType).includes('stu')) {
